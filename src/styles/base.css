@@ -1,0 +1,8 @@
+@layer base {
+  html {
+    @apply rounded-xl;
+  }
+  body {
+    @apply bg-bg text-fg;
+  }
+}

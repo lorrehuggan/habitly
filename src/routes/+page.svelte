@@ -1,41 +1,22 @@
 <script lang="ts">
+  import Timeline from "$components/timeline/Component.svelte";
   import { onMount } from "svelte";
   import type { PageProps } from "./$types";
-  let { data }: PageProps = $props();
-  let timeline: Array<Array<string>> = $state([]);
+
+  const { data }: PageProps = $props();
+  const timeline: Array<Array<string>> = $state([]);
 
   onMount(() => {
-    timeline.push(data.days.Sun);
-    timeline.push(data.days.Mon);
-    timeline.push(data.days.Tue);
-    timeline.push(data.days.Wed);
-    timeline.push(data.days.Thu);
-    timeline.push(data.days.Fri);
-    timeline.push(data.days.Sat);
+    timeline.push(data.timeline.days.Sun);
+    timeline.push(data.timeline.days.Mon);
+    timeline.push(data.timeline.days.Tue);
+    timeline.push(data.timeline.days.Wed);
+    timeline.push(data.timeline.days.Thu);
+    timeline.push(data.timeline.days.Fri);
+    timeline.push(data.timeline.days.Sat);
   });
 </script>
 
-<main class="container">
-  <div>Walk</div>
-  {#each timeline as tl}
-    <div class="one">
-      {#each tl as day}
-        <div class="box" data-date={day}></div>
-      {/each}
-    </div>
-  {/each}
-</main>
-
-<style>
-  .one {
-    padding-bottom: 4px;
-    display: flex;
-    gap: 4px;
-  }
-  .box {
-    height: 12px;
-    width: 12px;
-    background-color: dodgerblue;
-    border-radius: 2px;
-  }
-</style>
+{#each data.habits as habit}
+  <Timeline {timeline} {habit} />
+{/each}

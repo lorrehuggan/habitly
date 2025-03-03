@@ -1,0 +1,9 @@
+@utility flex-center {
+	@apply flex items-center;
+}
+@utility w-timeline {
+	@apply w-[620px];
+}
+@utility transition-color {
+	@apply transition-colors duration-200 ease-in-out;
+}
