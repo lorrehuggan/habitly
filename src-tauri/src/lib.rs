@@ -3,10 +3,10 @@ mod timeline;
 
 use std::fs::OpenOptions;
 
-use handlers::habits::get_habits;
+use handlers::habits;
 use sqlx::{sqlite::SqlitePoolOptions, Pool, Sqlite};
 use tauri::{App, Manager};
-use timeline::graph::init::init_timeline;
+use timeline::graph;
 
 struct AppState {
     db: Pool<Sqlite>,
@@ -25,7 +25,10 @@ pub fn run() {
             Ok(())
         })
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![init_timeline, get_habits])
+        .invoke_handler(tauri::generate_handler![
+            graph::init_timeline,
+            habits::get_all_habits
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

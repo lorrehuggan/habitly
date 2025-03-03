@@ -4,7 +4,12 @@ import type { PageLoad } from "./$types";
 import { invoke } from "@tauri-apps/api/core";
 
 export const load: PageLoad = async () => {
-  const timeline: Timeline = await invoke("init_timeline");
-  const habits: Habit[] = await invoke("get_habits");
-  return { timeline, habits };
+  try {
+    const timeline: Timeline = await invoke("init_timeline");
+    const habits: Habit[] = await invoke("get_all_habits");
+    return { timeline, habits };
+  } catch (e) {
+    console.log(e);
+    return { error: e };
+  }
 };

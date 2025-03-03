@@ -37,13 +37,13 @@ impl Habit {
 }
 
 #[tauri::command]
-pub async fn get_habits(state: tauri::State<'_, AppState>) -> Result<Vec<Habit>, String> {
+pub async fn get_all_habits(state: tauri::State<'_, AppState>) -> Result<Vec<Habit>, String> {
     let db = &state.db;
 
     let habits: Vec<Habit> = sqlx::query_as("SELECT * FROM habits")
         .fetch_all(db)
         .await
-        .map_err(|e| format!("Failed to get todos {}", e))?;
+        .map_err(|e| format!("Failed to get habits {}", e))?;
 
     let habits = habits
         .into_iter()

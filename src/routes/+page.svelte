@@ -7,6 +7,8 @@
   const timeline: Array<Array<string>> = $state([]);
 
   onMount(() => {
+    if (!data.timeline) return;
+    //TODO:Move this logic to the backend
     timeline.push(data.timeline.days.Sun);
     timeline.push(data.timeline.days.Mon);
     timeline.push(data.timeline.days.Tue);
@@ -17,6 +19,13 @@
   });
 </script>
 
-{#each data.habits as habit}
-  <Timeline {timeline} {habit} />
-{/each}
+{#if data.timeline}
+  {#each data.habits as habit}
+    <Timeline {timeline} {habit} />
+  {/each}
+{/if}
+{#if data.error}
+  <div class="flex-center justify-center p-4">
+    <p class="text-sm text-rose-400">{data.error}</p>
+  </div>
+{/if}
