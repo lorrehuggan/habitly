@@ -1,9 +1,10 @@
 mod handlers;
 mod timeline;
+mod utils;
 
 use std::fs::OpenOptions;
 
-use handlers::habits;
+use handlers::{commits, habits};
 use sqlx::{sqlite::SqlitePoolOptions, Pool, Sqlite};
 use tauri::{App, Manager};
 use timeline::graph;
@@ -27,7 +28,10 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
             graph::init_timeline,
-            habits::get_all_habits
+            habits::get_all_habits,
+            commits::get_habit_commits,
+            commits::create_commit,
+            commits::delete_commit
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

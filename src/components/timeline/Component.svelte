@@ -1,12 +1,50 @@
 <script lang="ts">
   import clsx from "clsx";
-  import type { Timeline } from "../../types/timeline";
-  import type { Habit } from "../../types/habit";
+  import type { Commit, Habit } from "../../types/timeline";
+  import { actionGetCommits } from "../../actions/timeline";
+  import dayjs from "dayjs";
+  import { invoke } from "@tauri-apps/api/core";
+  import { onMount } from "svelte";
 
   let { timeline, habit }: { timeline: Array<Array<string>>; habit: Habit } = $props();
+  let committedToday = $state(false);
+  let today = dayjs().format("YYYY-MM-DD").toString();
+
+  onMount(async () => {
+    const commits = await actionGetCommits(habit.id);
+    const todaysCommit = commits?.find((commit) => commit.created === today);
+    if (todaysCommit) {
+      committedToday = true;
+    }
+  });
+
+  async function addCommit(id: string) {
+    switch (committedToday) {
+      case false:
+        committedToday = true;
+        try {
+          await invoke("create_commit", { id });
+        } catch (e) {
+          console.log(e);
+          committedToday = false;
+        }
+        break;
+      case true:
+        committedToday = false;
+        try {
+          const commits = await actionGetCommits(id);
+          const todaysCommit = commits?.find((commit) => commit.created === today);
+          todaysCommit && (await invoke("delete_commit", { id: todaysCommit.id }));
+          console.log(commits);
+        } catch (e) {
+          console.log(e);
+          committedToday = true;
+        }
+    }
+  }
 </script>
 
-<div class="">
+{#snippet commitHeader()}
   <div
     class="w-timeline flex-center mx-auto mt-4 mb-2 justify-between rounded bg-neutral-700/20 p-2"
   >
@@ -15,7 +53,13 @@
       <p class="text-[10px]">{habit.description}</p>
     </div>
     <div>
-      <button aria-label="commit">
+      <button
+        onclick={() => addCommit(habit.id)}
+        aria-label="commit"
+        class={clsx("rounded bg-neutral-800 p-1 transition-colors", {
+          "bg-primary": committedToday,
+        })}
+      >
         <svg
           width="15"
           height="15"
@@ -32,6 +76,27 @@
       </button>
     </div>
   </div>
+{/snippet}
+
+{#snippet commitNode(commit: Commit | undefined, node: string)}
+  {@const isNodeToday = node === today}
+  {@const ongoing = commit?.status === "ongoing"}
+  {@const completed = commit?.status === "completed"}
+  {@const previousCommit = Boolean(commit)}
+  <button
+    aria-label="node"
+    class={clsx("size-2 cursor-pointer rounded-[2px] transition-colors", {
+      "bg-primary": isNodeToday && committedToday,
+      "bg-neutral-800": isNodeToday && !committedToday,
+      "bg-primary/55": !isNodeToday && completed,
+      "bg-primary/35": !isNodeToday && ongoing,
+      "bg-neutral-900": !isNodeToday && !previousCommit,
+    })}
+    data-date={node}
+  ></button>
+{/snippet}
+
+{#snippet commitTimeline()}
   {#each timeline as weekday, i}
     <div
       class={clsx("flex-center w-timeline mx-auto gap-1", {
@@ -39,17 +104,27 @@
       })}
     >
       {#each weekday as node}
-        <button
-          aria-label="node"
-          class={clsx("size-2 cursor-pointer rounded-[1px] bg-neutral-700/50", {})}
-          data-date={node}
-        ></button>
+        {#await actionGetCommits(habit.id)}
+          <div class="size-2 rounded-[2px] bg-neutral-700/10"></div>
+        {:then commits}
+          {@const commit = commits?.find((commit) => commit.created === node)}
+          {@render commitNode(commit, node)}
+        {/await}
       {/each}
     </div>
   {/each}
+{/snippet}
+
+{#snippet commitFooter()}
   <div class="w-timeline m-2 mx-auto rounded bg-neutral-700/20 p-2">
     <div>
       <p class="text-xs"></p>
     </div>
   </div>
+{/snippet}
+
+<div class="">
+  {@render commitHeader()}
+  {@render commitTimeline()}
+  {@render commitFooter()}
 </div>

@@ -1,4 +1,4 @@
-import type { Habit } from "../types/habit";
+import type { Habit } from "../types/timeline";
 import type { Timeline } from "../types/timeline";
 import type { PageLoad } from "./$types";
 import { invoke } from "@tauri-apps/api/core";
