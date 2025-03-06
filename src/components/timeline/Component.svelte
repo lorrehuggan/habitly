@@ -8,10 +8,11 @@
 
   let { timeline, habit }: { timeline: Array<Array<string>>; habit: Habit } = $props();
   let committedToday = $state(false);
-  let today = dayjs().format("YYYY-MM-DD").toString();
+  let commits: Commit[] | undefined = $state();
+  let today = dayjs().format("YYYY-MM-DD");
 
   onMount(async () => {
-    const commits = await actionGetCommits(habit.id);
+    commits = await actionGetCommits(habit.id);
     const todaysCommit = commits?.find((commit) => commit.created === today);
     if (todaysCommit) {
       committedToday = true;
@@ -46,7 +47,7 @@
 
 {#snippet commitHeader()}
   <div
-    class="w-timeline flex-center mx-auto mt-4 mb-2 justify-between rounded bg-neutral-700/20 p-2"
+    class="w-timeline flex-center mx-auto mt-4 mb-2 justify-between rounded bg-neutral-800/20 p-2"
   >
     <div>
       <p class="text-xs">{habit.title}</p>
@@ -66,6 +67,9 @@
           viewBox="0 0 15 15"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
+          class={clsx("transition-colors", {
+            "text-bg": committedToday,
+          })}
           ><path
             d="M11.4669 3.72684C11.7558 3.91574 11.8369 4.30308 11.648 4.59198L7.39799 11.092C7.29783 11.2452 7.13556 11.3467 6.95402 11.3699C6.77247 11.3931 6.58989 11.3355 6.45446 11.2124L3.70446 8.71241C3.44905 8.48022 3.43023 8.08494 3.66242 7.82953C3.89461 7.57412 4.28989 7.55529 4.5453 7.78749L6.75292 9.79441L10.6018 3.90792C10.7907 3.61902 11.178 3.53795 11.4669 3.72684Z"
             fill="currentColor"
@@ -80,17 +84,21 @@
 
 {#snippet commitNode(commit: Commit | undefined, node: string)}
   {@const isNodeToday = node === today}
+  {@const isThisMonth = dayjs(node).isSame(dayjs(today), "month")}
+  {@const isAfterToday = dayjs(node).isAfter(dayjs(today), "day")}
   {@const ongoing = commit?.status === "ongoing"}
   {@const completed = commit?.status === "completed"}
   {@const previousCommit = Boolean(commit)}
+  {@debug isThisMonth, isNodeToday}
   <button
     aria-label="node"
     class={clsx("size-2 cursor-pointer rounded-[2px] transition-colors", {
       "bg-primary": isNodeToday && committedToday,
       "bg-neutral-800": isNodeToday && !committedToday,
-      "bg-primary/55": !isNodeToday && completed,
-      "bg-primary/35": !isNodeToday && ongoing,
-      "bg-neutral-900": !isNodeToday && !previousCommit,
+      "bg-primary/45": !isNodeToday && completed,
+      "bg-primary/25": !isNodeToday && ongoing,
+      "bg-neutral-800/40": !isNodeToday && !previousCommit,
+      "opacity-80": isAfterToday,
     })}
     data-date={node}
   ></button>
@@ -104,12 +112,8 @@
       })}
     >
       {#each weekday as node}
-        {#await actionGetCommits(habit.id)}
-          <div class="size-2 rounded-[2px] bg-neutral-700/10"></div>
-        {:then commits}
-          {@const commit = commits?.find((commit) => commit.created === node)}
-          {@render commitNode(commit, node)}
-        {/await}
+        {@const commit = commits?.find((commit) => commit.created === node)}
+        {@render commitNode(commit, node)}
       {/each}
     </div>
   {/each}
