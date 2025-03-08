@@ -1,16 +1,13 @@
 <script lang="ts">
-  import clsx from "clsx";
-  import type { Commit, Habit } from "../../types/timeline";
-  import { actionGetCommits } from "../../actions/timeline";
-  import dayjs from "dayjs";
-  import { invoke } from "@tauri-apps/api/core";
-  import { onMount } from "svelte";
-  import { toast } from "svelte-sonner";
-  import Check from "$components/icons/Check.svelte";
-  import Box from "$components/icons/Box.svelte";
+  import Settings from "$components/icons/Settings.svelte";
   import Star from "$components/icons/Star.svelte";
   import StarFilled from "$components/icons/StarFilled.svelte";
-  import Settings from "$components/icons/Settings.svelte";
+  import { invoke } from "@tauri-apps/api/core";
+  import clsx from "clsx";
+  import dayjs from "dayjs";
+  import { onMount } from "svelte";
+  import { actionGetCommits } from "../../actions/timeline";
+  import type { Commit, Habit } from "../../types/timeline";
 
   let { timeline, habit }: { timeline: Array<Array<string>>; habit: Habit } = $props();
   let committedToday = $state(false);
@@ -92,7 +89,6 @@
   {@const previousCommit = Boolean(commit)}
   {@debug isThisMonth, isNodeToday}
   <button
-    disabled={!isThisMonth}
     aria-label="node"
     class={clsx("size-2 cursor-pointer rounded-[2px] transition-colors", {
       "bg-primary": isNodeToday && committedToday,

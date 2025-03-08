@@ -50,11 +50,11 @@ pub fn run() {
         })
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
-            graph::init_timeline,
-            habits::get_all_habits,
             commits::get_habit_commits,
             commits::create_commit,
-            commits::delete_commit
+            commits::delete_commit,
+            graph::init_timeline,
+            habits::get_all_habits,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
