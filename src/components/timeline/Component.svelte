@@ -5,6 +5,12 @@
   import dayjs from "dayjs";
   import { invoke } from "@tauri-apps/api/core";
   import { onMount } from "svelte";
+  import { toast } from "svelte-sonner";
+  import Check from "$components/icons/Check.svelte";
+  import Box from "$components/icons/Box.svelte";
+  import Star from "$components/icons/Star.svelte";
+  import StarFilled from "$components/icons/StarFilled.svelte";
+  import Settings from "$components/icons/Settings.svelte";
 
   let { timeline, habit }: { timeline: Array<Array<string>>; habit: Habit } = $props();
   let committedToday = $state(false);
@@ -47,36 +53,31 @@
 
 {#snippet commitHeader()}
   <div
-    class="w-timeline flex-center mx-auto mt-4 mb-2 justify-between rounded bg-neutral-800/20 p-2"
+    class="w-timeline flex-center mx-auto mt-6 mb-2 justify-between rounded bg-neutral-800/40 p-2"
   >
     <div>
       <p class="text-xs">{habit.title}</p>
       <p class="text-[10px]">{habit.description}</p>
     </div>
-    <div>
+    <div class="flex-center gap-2">
+      <button
+        aria-label="habit settings"
+        class="cursor-pointer rounded bg-neutral-800 p-1 transition-colors"
+      >
+        <Settings />
+      </button>
       <button
         onclick={() => addCommit(habit.id)}
         aria-label="commit"
-        class={clsx("rounded bg-neutral-800 p-1 transition-colors", {
+        class={clsx("cursor-pointer rounded bg-neutral-800 p-1 transition-colors", {
           "bg-primary": committedToday,
         })}
       >
-        <svg
-          width="15"
-          height="15"
-          viewBox="0 0 15 15"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          class={clsx("transition-colors", {
-            "text-bg": committedToday,
-          })}
-          ><path
-            d="M11.4669 3.72684C11.7558 3.91574 11.8369 4.30308 11.648 4.59198L7.39799 11.092C7.29783 11.2452 7.13556 11.3467 6.95402 11.3699C6.77247 11.3931 6.58989 11.3355 6.45446 11.2124L3.70446 8.71241C3.44905 8.48022 3.43023 8.08494 3.66242 7.82953C3.89461 7.57412 4.28989 7.55529 4.5453 7.78749L6.75292 9.79441L10.6018 3.90792C10.7907 3.61902 11.178 3.53795 11.4669 3.72684Z"
-            fill="currentColor"
-            fill-rule="evenodd"
-            clip-rule="evenodd"
-          ></path></svg
-        >
+        {#if committedToday}
+          <StarFilled />
+        {:else}
+          <Star />
+        {/if}
       </button>
     </div>
   </div>
@@ -91,6 +92,7 @@
   {@const previousCommit = Boolean(commit)}
   {@debug isThisMonth, isNodeToday}
   <button
+    disabled={!isThisMonth}
     aria-label="node"
     class={clsx("size-2 cursor-pointer rounded-[2px] transition-colors", {
       "bg-primary": isNodeToday && committedToday,
@@ -107,7 +109,7 @@
 {#snippet commitTimeline()}
   {#each timeline as weekday, i}
     <div
-      class={clsx("flex-center w-timeline mx-auto gap-1", {
+      class={clsx("flex-center w-timeline mx-auto gap-1 ", {
         "mt-1": i !== 0,
       })}
     >
@@ -119,16 +121,7 @@
   {/each}
 {/snippet}
 
-{#snippet commitFooter()}
-  <div class="w-timeline m-2 mx-auto rounded bg-neutral-700/20 p-2">
-    <div>
-      <p class="text-xs"></p>
-    </div>
-  </div>
-{/snippet}
-
 <div class="">
   {@render commitHeader()}
   {@render commitTimeline()}
-  {@render commitFooter()}
 </div>

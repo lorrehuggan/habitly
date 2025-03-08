@@ -2,15 +2,19 @@ mod handlers;
 mod timeline;
 mod utils;
 
-use std::fs::OpenOptions;
+use std::{
+    fs::{self, OpenOptions},
+    path::PathBuf,
+};
 
-use handlers::{commits, habits};
+use handlers::{commits, habits, settings};
 use sqlx::{sqlite::SqlitePoolOptions, Pool, Sqlite};
 use tauri::{App, Manager};
 use timeline::graph;
 
 struct AppState {
     db: Pool<Sqlite>,
+    settings_dir: PathBuf,
 }
 
 // #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -19,7 +23,26 @@ pub fn run() {
         .setup(|app| {
             tauri::async_runtime::block_on(async {
                 let db = init_db(app).await;
-                let state = AppState { db };
+                let mut settings_dir = app.path().app_local_data_dir().unwrap();
+                settings_dir.push("settings.json");
+
+                if !settings_dir.exists() {
+                    println!("Settings file does not exist, creating new settings file");
+                    let settings = settings::Settings::new();
+                    let settings_json = serde_json::to_string(&settings);
+                    match settings_json {
+                        Ok(settings_json) => match fs::write(&settings_dir, settings_json) {
+                            Ok(_) => {
+                                println!("Settings file created at: {}", settings_dir.display())
+                            }
+                            // TODO: error handling
+                            Err(e) => println!("Error writing settings file: {}", e),
+                        },
+                        Err(e) => println!("Error serializing settings: {}", e),
+                    }
+                }
+
+                let state = AppState { db, settings_dir };
 
                 app.manage(state);
             });

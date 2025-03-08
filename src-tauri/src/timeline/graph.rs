@@ -33,16 +33,17 @@ impl Timeline {
             while current_week_start.weekday() != Weekday::Sun {
                 current_week_start -= Duration::days(1);
             }
+
             for j in 0..7 {
                 let current_date = current_week_start + Duration::days(j);
 
                 if let Some(day_name) =
                     days_of_week.get(current_date.weekday().number_from_sunday() as usize - 1)
                 {
-                    days_map
-                        .get_mut(day_name)
-                        .unwrap()
-                        .push(format!("{}", current_date.format("%Y-%m-%d")));
+                    match days_map.get_mut(day_name) {
+                        Some(map) => map.push(current_date.format("%Y-%m-%d").to_string()),
+                        None => println!("Day not found: {}", day_name),
+                    }
                 }
             }
         }
