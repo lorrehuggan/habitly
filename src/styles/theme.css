@@ -4,5 +4,6 @@
   --color-muted: oklch(32.62% 0.022 270.66);
   --color-muted-fg: oklch(59.39% 0.0524 276.88);
   --color-primary: oklch(83.63% 0.1259 175.88);
-  --color-error: oklch(65.5% 0.1441 349.97);
+  --color-warning: var(--color-amber-400);
+  --color-error: var(--color-rose-500);
 }

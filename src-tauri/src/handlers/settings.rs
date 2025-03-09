@@ -5,6 +5,7 @@ use std::fs;
 use std::io;
 
 #[derive(Serialize, Deserialize, Debug)]
+#[serde(rename_all = "camelCase")]
 pub enum Theme {
     Blue,
     Green,
@@ -30,9 +31,9 @@ impl Settings {
         }
     }
     pub fn load(state: tauri::State<'_, AppState>) -> Result<Self, io::Error> {
-        let settings_dir = state.settings_dir.clone();
+        let settings_dir = &state.settings_dir;
 
-        let settings_json = fs::read_to_string(&settings_dir)?;
+        let settings_json = fs::read_to_string(settings_dir)?;
         let settings: Self = serde_json::from_str(&settings_json)?;
 
         Ok(settings)

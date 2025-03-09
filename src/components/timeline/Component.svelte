@@ -7,9 +7,13 @@
   import dayjs from "dayjs";
   import { onMount } from "svelte";
   import { actionGetCommits } from "../../actions/timeline";
-  import type { Commit, Habit } from "../../types/timeline";
+  import type { Commit, Habit, UserSettings } from "../../types/timeline";
 
-  let { timeline, habit }: { timeline: Array<Array<string>>; habit: Habit } = $props();
+  let {
+    timeline,
+    habit,
+    userSettings,
+  }: { timeline: Array<Array<string>>; habit: Habit; userSettings?: UserSettings } = $props();
   let committedToday = $state(false);
   let commits: Commit[] | undefined = $state();
   let today = dayjs().format("YYYY-MM-DD");
@@ -57,12 +61,13 @@
       <p class="text-[10px]">{habit.description}</p>
     </div>
     <div class="flex-center gap-2">
-      <button
+      <a
+        href={`habit/${habit.id}`}
         aria-label="habit settings"
         class="cursor-pointer rounded bg-neutral-800 p-1 transition-colors"
       >
         <Settings />
-      </button>
+      </a>
       <button
         onclick={() => addCommit(habit.id)}
         aria-label="commit"
@@ -82,21 +87,20 @@
 
 {#snippet commitNode(commit: Commit | undefined, node: string)}
   {@const isNodeToday = node === today}
-  {@const isThisMonth = dayjs(node).isSame(dayjs(today), "month")}
   {@const isAfterToday = dayjs(node).isAfter(dayjs(today), "day")}
   {@const ongoing = commit?.status === "ongoing"}
   {@const completed = commit?.status === "completed"}
   {@const previousCommit = Boolean(commit)}
-  {@debug isThisMonth, isNodeToday}
   <button
     aria-label="node"
     class={clsx("size-2 cursor-pointer rounded-[2px] transition-colors", {
       "bg-primary": isNodeToday && committedToday,
-      "bg-neutral-800": isNodeToday && !committedToday,
       "bg-primary/45": !isNodeToday && completed,
       "bg-primary/25": !isNodeToday && ongoing,
       "bg-neutral-800/40": !isNodeToday && !previousCommit,
       "opacity-80": isAfterToday,
+      "bg-neutral-800": isNodeToday && !committedToday && !userSettings?.highlightCurrentDay,
+      "bg-rose-400": isNodeToday && userSettings?.highlightCurrentDay && !committedToday,
     })}
     data-date={node}
   ></button>

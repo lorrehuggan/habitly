@@ -53,8 +53,20 @@ pub fn run() {
             commits::get_habit_commits,
             commits::create_commit,
             commits::delete_commit,
+            //--->
             graph::init_timeline,
+            //--->
             habits::get_all_habits,
+            habits::get_habit_by_id,
+            habits::get_archived_habits,
+            habits::create_habit,
+            habits::update_habit,
+            habits::delete_habit,
+            habits::archive_habit,
+            habits::restore_habit,
+            //--->
+            settings::get_settings,
+            settings::update_settings
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -84,7 +96,10 @@ async fn init_db(app: &App) -> Pool<Sqlite> {
         .expect("Error connecting to database");
 
     println!("Migrating database");
-    sqlx::migrate!("./migrations").run(&db).await.unwrap();
+    sqlx::migrate!("./migrations")
+        .run(&db)
+        .await
+        .expect("Error migrating database");
 
     db
 }

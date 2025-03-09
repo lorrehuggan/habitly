@@ -20,9 +20,13 @@
 </script>
 
 {#if data.timeline}
-  {#each data.habits as habit}
-    <Timeline {timeline} {habit} />
-  {/each}
+  {#if data.habits.length}
+    {#each data.habits as habit}
+      <Timeline {timeline} {habit} userSettings={data.userSettings} />
+    {/each}
+  {:else}
+    <div>No Habits</div>
+  {/if}
 {/if}
 {#if data.error}
   <div class="flex-center justify-center p-4">

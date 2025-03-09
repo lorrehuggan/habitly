@@ -15,11 +15,18 @@ export interface Commit {
   id: string;
   created: string;
   message: string;
-  status: "ongoing" | "completed";
+  status: "ongoing" | "completed" | "archived";
   completions: number;
   habit_id: string;
 }
 
 export interface Timeline {
   days: Record<WeekDay, Array<string>>;
+}
+
+export interface UserSettings {
+  theme: string;
+  weekStartOnSunday: boolean;
+  showCategoryFilter: boolean;
+  highlightCurrentDay: boolean;
 }
