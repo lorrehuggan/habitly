@@ -13,6 +13,10 @@ const config = {
       $components: "./src/components",
       $styles: "./src/styles",
       $icons: "./src/components",
+      $actions: "./src/actions",
+      $types: "./src/types",
+      $utils: "./src/utils",
+      $stores: "./src/stores",
     },
   },
 };

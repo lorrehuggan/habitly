@@ -6,7 +6,7 @@
   import clsx from "clsx";
   import dayjs from "dayjs";
   import { onMount } from "svelte";
-  import { actionGetCommits } from "../../actions/timeline";
+  import { getCommits } from "../../actions/timeline";
   import type { Commit, Habit, UserSettings } from "../../types/timeline";
 
   let {
@@ -19,7 +19,7 @@
   let today = dayjs().format("YYYY-MM-DD");
 
   onMount(async () => {
-    commits = await actionGetCommits(habit.id);
+    commits = await getCommits(habit.id);
     const todaysCommit = commits?.find((commit) => commit.created === today);
     if (todaysCommit) {
       committedToday = true;
@@ -40,7 +40,7 @@
       case true:
         committedToday = false;
         try {
-          const commits = await actionGetCommits(id);
+          const commits = await getCommits(id);
           const todaysCommit = commits?.find((commit) => commit.created === today);
           todaysCommit && (await invoke("delete_commit", { id: todaysCommit.id }));
           console.log(commits);
@@ -98,7 +98,7 @@
       "bg-primary/45": !isNodeToday && completed,
       "bg-primary/25": !isNodeToday && ongoing,
       "bg-neutral-800/40": !isNodeToday && !previousCommit,
-      "opacity-80": isAfterToday,
+      "opacity-50": isAfterToday,
       "bg-neutral-800": isNodeToday && !committedToday && !userSettings?.highlightCurrentDay,
       "bg-rose-400": isNodeToday && userSettings?.highlightCurrentDay && !committedToday,
     })}
