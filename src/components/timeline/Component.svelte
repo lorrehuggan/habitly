@@ -8,6 +8,7 @@
   import { onMount } from "svelte";
   import { getCommits } from "../../actions/timeline";
   import type { Commit, Habit, UserSettings } from "../../types/timeline";
+  import Button from "$components/ui/Button.svelte";
 
   let {
     timeline,
@@ -68,10 +69,12 @@
       >
         <Settings />
       </a>
-      <button
+      <Button
+        size="icon"
+        intent="primary"
         onclick={() => addCommit(habit.id)}
         aria-label="commit"
-        class={clsx("cursor-pointer rounded bg-neutral-800 p-1 transition-colors", {
+        class={clsx("hover:bg-primary/70", {
           "bg-primary": committedToday,
         })}
       >
@@ -80,7 +83,7 @@
         {:else}
           <Star />
         {/if}
-      </button>
+      </Button>
     </div>
   </div>
 {/snippet}
