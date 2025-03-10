@@ -1,3 +1,37 @@
+@font-face {
+  font-family: "Poppins";
+  src: url("../assets/fonts/poppins/Poppins-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Poppins";
+  font-weight: 500;
+  src: url("../assets/fonts/poppins/Poppins-Medium.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Poppins";
+  font-weight: 600;
+  src: url("../assets/fonts/poppins/Poppins-SemiBold.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Poppins";
+  font-weight: 700;
+  src: url("../assets/fonts/poppins/Poppins-Bold.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Poppins";
+  font-weight: 800;
+  src: url("../assets/fonts/poppins/Poppins-ExtraBold.ttf") format("truetype");
+}
+
+:root {
+  font-family: "Poppins", monospace;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
 @layer base {
   html {
     @apply rounded-xl;
