@@ -47,7 +47,7 @@ pub async fn get_all_habits(state: tauri::State<'_, AppState>) -> Result<Vec<Hab
 
     let habits = habits
         .into_iter()
-        .filter(|habit| habit.status != "Archived")
+        .filter(|habit| habit.status != "archived")
         .collect();
 
     Ok(habits)
@@ -110,7 +110,7 @@ pub async fn archive_habit(
 ) -> Result<TauriResponse, String> {
     let db = &state.db;
 
-    let query = "UPDATE habits SET status = 'Archived' WHERE id = $1";
+    let query = "UPDATE habits SET status = 'archived' WHERE id = $1";
 
     sqlx::query(query)
         .bind(id)
@@ -161,7 +161,7 @@ pub async fn get_archived_habits(state: tauri::State<'_, AppState>) -> Result<Ve
 
     let habits = habits
         .into_iter()
-        .filter(|habit| habit.status == "Archived")
+        .filter(|habit| habit.status == "archived")
         .collect();
 
     Ok(habits)
@@ -204,7 +204,7 @@ pub async fn restore_habit(
 ) -> Result<TauriResponse, String> {
     let db = &state.db;
 
-    let query = "UPDATE habits SET status = 'Active' WHERE id = $1";
+    let query = "UPDATE habits SET status = 'ongoing' WHERE id = $1";
 
     sqlx::query(query)
         .bind(id)

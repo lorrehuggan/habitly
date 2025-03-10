@@ -1,14 +1,14 @@
 <script lang="ts">
-  import Settings from "$components/icons/Settings.svelte";
-  import Star from "$components/icons/Star.svelte";
-  import StarFilled from "$components/icons/StarFilled.svelte";
-  import { invoke } from "@tauri-apps/api/core";
   import clsx from "clsx";
   import dayjs from "dayjs";
   import { onMount } from "svelte";
   import { getCommits } from "../../actions/timeline";
   import type { Commit, Habit, UserSettings } from "../../types/timeline";
+  import Settings from "$components/icons/Settings.svelte";
+  import Star from "$components/icons/Star.svelte";
+  import StarFilled from "$components/icons/StarFilled.svelte";
   import Button from "$components/ui/Button.svelte";
+  import { invoke } from "@tauri-apps/api/core";
 
   let {
     timeline,

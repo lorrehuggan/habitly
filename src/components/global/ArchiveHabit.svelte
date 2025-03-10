@@ -1,8 +1,8 @@
-<script lang="ts">
-  import { archiveHabit, deleteHabit } from "$actions/timeline";
+<script>
+  import { deleteHabit } from "$actions/timeline";
   import Button from "$components/ui/Button.svelte";
   import DialogComponent from "$components/ui/DialogComponent.svelte";
-  let { id, children, archive }: { archive?: boolean; id: string; children?: () => any } = $props();
+  let { id, children } = $props();
 </script>
 
 <DialogComponent
@@ -14,11 +14,7 @@
   {/snippet}
   {#snippet body()}
     <div class="flex-center mt-8 justify-end gap-2">
-      {#if !archive}
-        <Button intent="muted" size="button" aria-label="archive" onclick={() => archiveHabit(id)}
-          >Archive</Button
-        >
-      {/if}
+      <Button intent="muted" size="button" aria-label="archive">Archive</Button>
       <Button intent="error" size="button" aria-label="delete" onclick={() => deleteHabit(id)}
         >Delete</Button
       >

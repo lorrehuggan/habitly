@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { PageProps } from "./$types";
-  import Trash from "$components/icons/Trash.svelte";
+  import TrashIcon from "$components/icons/TrashIcon.svelte";
   import Calendar from "$components/icons/Calendar.svelte";
   import DeleteHabit from "$components/global/DeleteHabit.svelte";
   let { data }: PageProps = $props();
@@ -22,7 +22,7 @@
             aria-label="delete habit"
             class="hover:bg-error cursor-pointer rounded bg-neutral-800 p-1 transition-colors"
           >
-            <Trash />
+            <TrashIcon />
           </button>
         </DeleteHabit>
       </div>
