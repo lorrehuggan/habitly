@@ -30,7 +30,7 @@ export async function archiveHabit(id: string) {
     const response: { message: string; error: boolean } = await invoke("archive_habit", { id });
 
     if (response.message === "success") {
-      goto("/");
+      goto("/archive");
     }
   } catch (e) {
     //TODO: handle error

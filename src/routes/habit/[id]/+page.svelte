@@ -3,6 +3,8 @@
   import TrashIcon from "$components/icons/TrashIcon.svelte";
   import Calendar from "$components/icons/Calendar.svelte";
   import DeleteHabit from "$components/global/DeleteHabit.svelte";
+  import Button from "$components/ui/Button.svelte";
+  import PenIcon from "$components/icons/PenIcon.svelte";
   let { data }: PageProps = $props();
 </script>
 
@@ -14,16 +16,16 @@
         <h3 class="text-neutral-400">{data.habit.description}</h3>
       </div>
       <div class="flex-center gap-2">
-        <button aria-label="view calendar" class="rounded bg-neutral-800 p-1">
+        <Button intent="primary" size="icon">
+          <PenIcon />
+        </Button>
+        <Button intent="primary" size="icon">
           <Calendar />
-        </button>
+        </Button>
         <DeleteHabit id={data.habit.id}>
-          <button
-            aria-label="delete habit"
-            class="hover:bg-error cursor-pointer rounded bg-neutral-800 p-1 transition-colors"
-          >
+          <Button intent="danger" size="icon">
             <TrashIcon />
-          </button>
+          </Button>
         </DeleteHabit>
       </div>
     </div>

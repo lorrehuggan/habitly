@@ -54,12 +54,10 @@
 </script>
 
 {#snippet commitHeader()}
-  <div
-    class="w-timeline flex-center mx-auto mt-6 mb-2 justify-between rounded bg-neutral-800/40 p-2"
-  >
+  <div class="w-timeline flex-center mx-auto mb-2 justify-between rounded bg-neutral-800/40 p-2">
     <div>
-      <p class="text-xs">{habit.title}</p>
-      <p class="text-[10px]">{habit.description}</p>
+      <p class="text-xs font-bold">{habit.title}</p>
+      <p class="text-fg/75 text-[10px]">{habit.description}</p>
     </div>
     <div class="flex-center gap-2">
       <a
@@ -74,15 +72,11 @@
         intent="primary"
         onclick={() => addCommit(habit.id)}
         aria-label="commit"
-        class={clsx("hover:bg-primary/70", {
-          "bg-primary": committedToday,
+        class={clsx("", {
+          "outline-primary outline-1": committedToday,
         })}
       >
-        {#if committedToday}
-          <StarFilled />
-        {:else}
-          <Star />
-        {/if}
+        <Star />
       </Button>
     </div>
   </div>
@@ -124,7 +118,7 @@
   {/each}
 {/snippet}
 
-<div class="">
+<div>
   {@render commitHeader()}
   {@render commitTimeline()}
 </div>

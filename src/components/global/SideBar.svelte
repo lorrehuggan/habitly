@@ -4,7 +4,7 @@
 </script>
 
 <aside
-  class="col-span-1 flex h-full flex-col items-center space-y-4 border-r-[1px] border-neutral-900 py-3"
+  class="col-span-1 flex h-full flex-col items-center space-y-4 border-r-[1px] border-neutral-900 py-8"
 >
   <a aria-label="home" href="/">
     <ActivityIcon />

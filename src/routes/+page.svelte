@@ -21,9 +21,11 @@
 
 {#if data.timeline}
   {#if data.habits.length}
-    {#each data.habits as habit}
-      <Timeline {timeline} {habit} userSettings={data.userSettings} />
-    {/each}
+    <div class="space-y-6">
+      {#each data.habits as habit}
+        <Timeline {timeline} {habit} userSettings={data.userSettings} />
+      {/each}
+    </div>
   {:else}
     <div>No Habits</div>
   {/if}

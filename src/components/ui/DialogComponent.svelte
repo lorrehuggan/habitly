@@ -10,12 +10,12 @@
     {@render trigger()}
   </Dialog.Trigger>
   <Dialog.Portal>
-    <Dialog.Overlay class="fixed inset-0 z-50 rounded-xl bg-black/80" />
+    <Dialog.Overlay class="fixed inset-0 z-50 rounded-xl bg-black/90" />
     <Dialog.Content
       class="bg-bg border-fg/30 fixed top-[50%] left-[50%] z-50 w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] rounded-xl border-[1px] p-5 shadow outline-hidden sm:max-w-[490px] md:w-full"
     >
       <Dialog.Title>{title}</Dialog.Title>
-      <Dialog.Description class="text-error text-sm">{description}</Dialog.Description>
+      <Dialog.Description class="text-error text-xs">{description}</Dialog.Description>
       {@render body()}
       <Dialog.Close class="absolute top-4 right-4 cursor-pointer"><Close /></Dialog.Close>
     </Dialog.Content>

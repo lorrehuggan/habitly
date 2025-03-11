@@ -5,13 +5,13 @@
   const button = cva("rounded transition-colors cursor-pointer", {
     variants: {
       intent: {
-        primary: "text-fg bg-neutral-800 hover:bg-neutral-900",
+        primary: "text-fg bg-neutral-800 hover:bg-neutral-700",
         secondary: "secondary",
-        error: "text-fg bg-error hover:bg-error/50",
+        danger: "text-fg bg-error hover:bg-error/50",
         muted: "text-fg hover:bg-neutral-800",
       },
       size: {
-        button: "text-sm px-2 py-1",
+        button: "text-sm flex-center gap-1 px-2 py-1",
         icon: "p-1",
       },
       disabled: {
